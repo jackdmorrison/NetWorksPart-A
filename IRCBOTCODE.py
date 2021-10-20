@@ -19,8 +19,6 @@ def joinChannel():
         message= sockVar.recv(2048).decode("UTF-8")
         message = message.strip('nr')
         print(message)
-def ping():
-    sockVar.send(bytes("PONG :","UTF-8"))
 def main():
     joinChannel()
     while 1: #infinite while loop
@@ -45,7 +43,7 @@ def receiveMessage():
                 sockVar.send(bytes("PRIVMSG "+channel+" :"+"Hello "+username + "n", "UTF-8"))
         else:
             sockVar.send(bytes("PRIVMSG " + channel + " :" + randomMessage() + "n", "UTF-8"))
-    if message.find("PING :" != 1)"":
-        ping()
+    if message.find("PING :" != 1):
+        sockVar.send(bytes("PONG :", "UTF-8"))
 
 main()
