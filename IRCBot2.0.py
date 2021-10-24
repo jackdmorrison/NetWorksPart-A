@@ -4,11 +4,11 @@ import argparse
 
 parse = argparse.ArgumentParser(description='Python Bot program.')
 
-parse.add_argument("-h","--host", help="allows User to change the Sever.")
+parse.add_argument("-b","--host", help="allows User to change the Sever.")
 parse.add_argument("-p","--port", help="allows user to change the port.")
 parse.add_argument("-n","--name", help="allows user to change the nickname of the bot.")
 parse.add_argument("-c","--channel", help="allows user to change the server channel.")
-args=parser.parse_arg()
+args=parse.parse_args()
 
 if args.host:
     server = args.host
@@ -34,10 +34,11 @@ exitcode = "CYA later" + botadminnickname
 
 def connect_server():
     sockVar.connect((server,port,0,0))
-    sockVar.send(bytes("USER "+botadminnickname+ " " + botadminnickname + " "+botadminnickname + " "+botadminnickname + " "+ "n", "UTF-8"))
-    sockVar.send(bytes("NICK "+ botadminnickname +"n", "UTF-8"))
+    
+    sockVar.send(bytes("NICK "+ botadminnickname+"\r\nUSER "+ botadminnickname+"0 * :realname\r\n","UTF-8"))
+    #sockVar.send(bytes("NICK "+ botadminnickname +"/n", "UTF-8"))
 def joinChannel():
-    sockVar.send(bytes("JOIN " + channel + "n", "UTF-8"))
+    sockVar.send(bytes("JOIN " + channel + "\n", "UTF-8"))
     message = ""
     while message.find("End of /NAMES list.") ==-1:
         message= sockVar.recv(2048).decode("UTF-8")
@@ -45,8 +46,12 @@ def joinChannel():
         print(message)
 def main():
     joinChannel()
-    while 1: #infinite while loop
+    #while 1:
+        #infinite while loop
+
+
 def randomMessage():
+    
     randomMessage1 = "Sky is blue"
     randomMessage2 = "Grass is green"
     randomMessage3 = "Water is clear"
@@ -87,5 +92,6 @@ def receiveMessage():
             sockVar.send(bytes("PRIVMSG " + channel + " :" + randomMessage() + "n", "UTF-8"))
     if message.find("PING :" != 1):
         sockVar.send(bytes("PONG :", "UTF-8"))
-
+connect_server()
 main()
+
